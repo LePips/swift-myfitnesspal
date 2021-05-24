@@ -98,6 +98,7 @@ extension MyFitnessPalClient {
         session.load(request: authRequest) { result in
             switch result {
             case .success(let response):
+                // TODO: Handle error from auth response with better information
                 guard let json = JSON.decode(data: response.body) else { completion(MyFitnessPalError.loginAuthError); return }
                 
                 // TODO: Implement proper dictionary access
@@ -115,6 +116,14 @@ extension MyFitnessPalClient {
             }
         }
     }
+}
+
+// MARK: Setters
+/*
+ Use setters whenever variables on the client are changed.
+ This is because many variables are set from completion handlers and cleans things up.
+ */
+extension MyFitnessPalClient {
     
     private func setUserID(_ id: String) {
         self.userID = id
