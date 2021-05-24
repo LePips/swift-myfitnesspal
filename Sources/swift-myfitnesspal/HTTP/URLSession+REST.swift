@@ -22,7 +22,6 @@ public class SimpleError: Error {
 
 extension URLSession {
     
-    // TODO - fix completion
     func load(request: HTTPRequest, completion: @escaping (HTTPResult) -> Void) {
         
         guard let urlRequest = request.urlRequest else {
