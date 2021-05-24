@@ -23,7 +23,7 @@ public class SimpleError: Error {
 extension URLSession {
     
     // TODO - fix completion
-    func load(request: MyFitnessPalRequest, completion: @escaping (HTTPResult) -> Void) {
+    func load(request: HTTPRequest, completion: @escaping (HTTPResult) -> Void) {
         
         guard let urlRequest = request.urlRequest else {
             completion(.failure(HTTPError(SimpleError("Could not construct url request"))))

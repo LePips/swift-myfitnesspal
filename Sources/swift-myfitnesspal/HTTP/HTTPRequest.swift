@@ -12,13 +12,13 @@ enum HTTPMethod: String {
     case POST
 }
 
-// TODO: Change to open class for proper private(set)
-protocol MyFitnessPalRequest {
+protocol HTTPRequest {
     var base: String { get }
     var path: [String] { get set }
     var body: Data? { get set }
     var headers: [String: String] { get set }
     var parameters: [String: String] { get set }
+    // TODO: Used as a work around for an array of objects to be parameterized.
     var explicitParameters: String { get set }
     
     var method: HTTPMethod { get }
@@ -27,7 +27,7 @@ protocol MyFitnessPalRequest {
     var urlRequest: URLRequest? { get }
 }
 
-struct SiteRequest: MyFitnessPalRequest {
+struct SiteRequest: HTTPRequest {
     
     var base: String = "https://www.myfitnesspal.com"
     var path: [String]
@@ -66,7 +66,7 @@ struct SiteRequest: MyFitnessPalRequest {
     }
 }
 
-struct APIRequest: MyFitnessPalRequest {
+struct APIRequest: HTTPRequest {
     
     var base: String = "https://api.myfitnesspal.com"
     var path: [String]
