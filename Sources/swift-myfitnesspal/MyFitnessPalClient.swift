@@ -66,7 +66,7 @@ extension MyFitnessPalClient {
         // javascript AUTH_TOKEN variable is at the top of the page and
         // swift regex will crash on long texts sometimes, divide to simplify
         // choosing 4 here is arbitrary
-        let range = NSRange(location: 0, length: page.utf8.count / 3)
+        let range = NSRange(location: 0, length: page.utf8.count / 4)
         let regex = try! NSRegularExpression(pattern: #"var AUTH_TOKEN = "(.*)""#, options: [])
         let match = regex.firstMatch(in: page, options: [], range: range)
         match?.range(at: 1)
