@@ -12,12 +12,14 @@ enum HTTPMethod: String {
     case POST
 }
 
+// TODO: Change to open class for proper private(set)
 protocol MyFitnessPalRequest {
     var base: String { get }
     var path: [String] { get set }
     var body: Data? { get set }
     var headers: [String: String] { get set }
     var parameters: [String: String] { get set }
+    var explicitParameters: String { get set }
     
     var method: HTTPMethod { get }
     
@@ -32,12 +34,14 @@ struct SiteRequest: MyFitnessPalRequest {
     var body: Data? = nil
     var headers: [String: String]
     var parameters: [String: String]
+    var explicitParameters: String
     
     var method: HTTPMethod
     
     var url: URL? {
         guard var components = URLComponents(string: base + "/" + path.joined(separator: "/")) else { return nil }
         components.queryItems = parameters.map({ URLQueryItem(name: $0, value: $1) })
+        components.query?.append(explicitParameters)
         
         return components.url
     }
@@ -52,32 +56,31 @@ struct SiteRequest: MyFitnessPalRequest {
         return request
     }
     
-    init(path: [String], body: Data? = nil, headers: [String: String] = [:], parameters: [String: String] = [:], method: HTTPMethod = .GET) {
+    init(path: [String], body: Data? = nil, headers: [String: String] = [:], parameters: [String: String] = [:], explicitParameters: String = "", method: HTTPMethod = .GET) {
         self.path = path
         self.body = body
         self.headers = headers
         self.parameters = parameters
         self.method = method
+        self.explicitParameters = explicitParameters
     }
 }
 
 struct APIRequest: MyFitnessPalRequest {
     
-    var base: String = "https://www.api.myfitnesspal.com"
+    var base: String = "https://api.myfitnesspal.com"
     var path: [String]
     var body: Data? = nil
     var headers: [String : String]
     var parameters: [String: String]
+    var explicitParameters: String
     
     var method: HTTPMethod = .GET
     
     var url: URL? {
         guard var components = URLComponents(string: base + "/" + path.joined(separator: "/")) else { return nil }
-        
-        for (key, value) in parameters {
-            let stringValue = String(describing: value)
-            components.queryItems?.append(URLQueryItem(name: key, value: stringValue))
-        }
+        components.queryItems = parameters.map({ URLQueryItem(name: $0, value: $1) })
+        components.query?.append(explicitParameters)
         
         return components.url
     }
@@ -92,9 +95,10 @@ struct APIRequest: MyFitnessPalRequest {
         return request
     }
     
-    init(path: [String], headers: [String: String] = [:], parameters: [String: String] = [:]) {
+    init(path: [String], headers: [String: String] = [:], parameters: [String: String] = [:], explicitParameters: String = "") {
         self.path = path
         self.headers = headers
         self.parameters = parameters
+        self.explicitParameters = explicitParameters
     }
 }
