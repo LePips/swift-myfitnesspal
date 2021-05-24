@@ -109,6 +109,45 @@ extension MyFitnessPalClient {
                 // casted to NSNumber for some unknown reason
                 self.setUserID(json["user_id"] as! String)
                 
+                self.getUserMetaData(completion: completion)
+            case .failure(_):
+                // TODO: Handle error from request properly instead of throwing login error
+                completion(MyFitnessPalError.loginError)
+            }
+        }
+    }
+    
+    private func getUserMetaData(completion: @escaping MyFitnessPalCompletion) {
+        let requestedFields = [
+            "diary_preferences",
+            "goal_preferences",
+            "unit_preferences",
+            "paid_subscriptions",
+            "account",
+            "goal_displays",
+            "location_preferences",
+            "system_data",
+            "profiles",
+            "step_sources",
+        ]
+        
+        var parameterFields = requestedFields.reduce("") { result, current in
+            result + "fields[]=\(current)&"
+        }
+        parameterFields.removeLast()
+        
+        // TODO: Replace with better error
+        guard let authToken = authToken else { completion(MyFitnessPalError.loginError); return }
+        
+        var headers = authToken.headers
+        headers["mfp-user-id"] = userID
+        
+        let userRequest = APIRequest(path: ["v2", "users", userID], headers: headers, parameters: [:], explicitParameters: parameterFields)
+        
+        session.load(request: userRequest) { result in
+            switch result {
+            case .success(let response):
+                // TODO: Parse json response and create corresponding structures
                 completion(nil)
             case .failure(_):
                 // TODO: Handle error from request properly instead of throwing login error
@@ -121,7 +160,8 @@ extension MyFitnessPalClient {
 // MARK: Setters
 /*
  Use setters whenever variables on the client are changed.
- This is because many variables are set from completion handlers and cleans things up.
+ This is because many variables are set from completion handlers and makes
+ variable setting more declarative and clean.
  */
 extension MyFitnessPalClient {
     
