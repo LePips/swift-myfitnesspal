@@ -17,6 +17,10 @@ struct AuthToken {
         return Date() > expireDate
     }
     
+    var headers: [String: String] {
+        return ["Authorization": "Bearer \(accessToken)", "mfp-client-id": "mfp-main-js"]
+    }
+    
     init(expiresIn: Double, accessToken: String, refreshToken: String) {
         self.expireDate = Date().addingTimeInterval(expiresIn)
         self.accessToken = accessToken
