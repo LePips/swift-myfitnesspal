@@ -9,6 +9,6 @@ import Foundation
 
 public struct Entry {
     
-    let name: String
-    let macros: Macros
+    public let name: String
+    public let macros: Macros
 }

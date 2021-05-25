@@ -9,10 +9,10 @@ import Foundation
 
 public struct Macros {
     
-    let calories: Int
-    let carbs: Int
-    let fat: Int
-    let protein: Int
-    let sodium: Int
-    let sugar: Int
+    public let calories: Int
+    public let carbs: Int
+    public let fat: Int
+    public let protein: Int
+    public let sodium: Int
+    public let sugar: Int
 }
