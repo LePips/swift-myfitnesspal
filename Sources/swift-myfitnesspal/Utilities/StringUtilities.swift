@@ -13,4 +13,8 @@ extension String {
         guard let data = data else { return nil }
         return String(decoding: data, as: UTF8.self)
     }
+    
+    func macroTrim() -> String {
+        return self.split(separator: " ")[0].replacingOccurrences(of: ",", with: "")
+    }
 }

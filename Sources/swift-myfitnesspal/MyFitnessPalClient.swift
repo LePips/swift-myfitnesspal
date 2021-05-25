@@ -11,7 +11,7 @@ import SwiftSoup
 // TODO: Make better completion value
 public typealias MyFitnessPalCompletion = (MyFitnessPalError?) -> Void
 
-public typealias MyFitnessPalDayCompletion = (Result<[Meal], MyFitnessPalError>) -> Void
+public typealias MyFitnessPalDayCompletion = (Result<Day, MyFitnessPalError>) -> Void
 
 
 public class MyFitnessPalClient {
@@ -72,7 +72,7 @@ extension MyFitnessPalClient {
                 guard let dayPage = String.decodeUTF8(data: response.body) else { completion(.failure(MyFitnessPalError.dayError)); return }
                 
                 do {
-                    try self.parseMeals(page: dayPage, completion: completion)
+                    try self.parseDay(page: dayPage, completion: completion)
                 } catch {
                     completion(.failure(MyFitnessPalError.dayParsingError))
                 }
@@ -100,7 +100,6 @@ extension MyFitnessPalClient {
         let range = NSRange(location: 0, length: page.utf8.count / 4)
         let regex = try! NSRegularExpression(pattern: #"var AUTH_TOKEN = "(.*)""#, options: [])
         let match = regex.firstMatch(in: page, options: [], range: range)
-        match?.range(at: 1)
         let tokenRange = Range(match!.range(at: 1), in: page)!
         
         return String(page[tokenRange])
@@ -192,8 +191,11 @@ extension MyFitnessPalClient {
         }
     }
     
-    private func parseMeals(page: String, completion: @escaping MyFitnessPalDayCompletion) throws {
+    private func parseDay(page: String, completion: @escaping MyFitnessPalDayCompletion) throws {
+        
         let soup: Document = try SwiftSoup.parse(page)
+        
+        // Get meals
         let mealHeaders = try soup.select("tr.meal_header")
         
         var meals: [Meal] = []
@@ -207,14 +209,15 @@ extension MyFitnessPalClient {
             while try possibleEntry.children().array()[0].children().array()[0].className() == "js-show-edit-food" {
                 let children = possibleEntry.children().array()
                 let name = try children[0].text()
-                let calories = try children[1].text().replacingOccurrences(of: ",", with: "")
-                let carbs = try children[2].text().split(separator: " ")[0].replacingOccurrences(of: ",", with: "")
-                let fat = try children[3].text().split(separator: " ")[0].replacingOccurrences(of: ",", with: "")
-                let protein = try children[4].text().split(separator: " ")[0].replacingOccurrences(of: ",", with: "")
-                let sodium = try children[5].text().split(separator: " ")[0].replacingOccurrences(of: ",", with: "")
-                let sugar = try children[6].text().split(separator: " ")[0].replacingOccurrences(of: ",", with: "")
+                let calories = try children[1].text().macroTrim()
+                let carbs = try children[2].text().macroTrim()
+                let fat = try children[3].text().macroTrim()
+                let protein = try children[4].text().macroTrim()
+                let sodium = try children[5].text().macroTrim()
+                let sugar = try children[6].text().macroTrim()
                 
-                let newEntry = Entry(name: name, calories: Int(calories)!, carbs: Int(carbs)!, fat: Int(fat)!, protein: Int(protein)!, sodium: Int(sodium)!, sugar: Int(sugar)!)
+                let entryMacros = Macros(calories: Int(calories)!, carbs: Int(carbs)!, fat: Int(fat)!, protein: Int(protein)!, sodium: Int(sodium)!, sugar: Int(sugar)!)
+                let newEntry = Entry(name: name, macros: entryMacros)
                 newMeal.addEntry(newEntry)
                 
                 possibleEntry = try possibleEntry.nextElementSibling()!
@@ -223,7 +226,55 @@ extension MyFitnessPalClient {
             meals.append(newMeal)
         }
         
-        completion(.success(meals))
+        // Get totals
+        // Order from parsing goes:
+        //    1- Daily total
+        //    2- Daily goal
+        //    3- remaining
+        let allTotals = try soup.select("tr.total").array()
+        
+        // Daily total
+        let dailyTotal = allTotals[0].children().array()
+        let totalMacros = try parseMacro(from: dailyTotal)
+        
+        // Daily goal
+        let dailyGoal = allTotals[1].children().array()
+        let goalMacros = try parseMacro(from: dailyGoal)
+        
+        // Remaining
+        let dailyRemaining = allTotals[2].children().array()
+        let remainingMacros = try parseMacro(from: dailyRemaining)
+        
+        let exerciseCalories = parseExerciseCalories(from: try soup.select("td.extra").text())
+        
+        // Create Day object
+        let day = Day(meals: meals, totalMacros: totalMacros, goalMacros: goalMacros, remainingMacros: remainingMacros, exerciseCalories: exerciseCalories)
+        
+        completion(.success(day))
+    }
+    
+    private func parseMacro(from elements: [Element]) throws -> Macros {
+        
+        let calories = try elements[1].text().macroTrim()
+        let carbs = try elements[2].text().macroTrim()
+        let fat = try elements[3].text().macroTrim()
+        let protein = try elements[4].text().macroTrim()
+        let sodium = try elements[5].text().macroTrim()
+        let sugar = try elements[6].text().macroTrim()
+        
+        return Macros(calories: Int(calories)!, carbs: Int(carbs)!, fat: Int(fat)!, protein: Int(protein)!, sodium: Int(sodium)!, sugar: Int(sugar)!)
+    }
+    
+    private func parseExerciseCalories(from text: String) -> Int {
+        
+        let range = NSRange(location: 0, length: text.utf16.count)
+        let regex = try! NSRegularExpression(pattern: #"\*You've earned (\d+) extra calories from exercise today"#)
+        guard let match = regex.firstMatch(in: text, options: [], range: range) else { return 0 }
+        guard let tokenRange = Range(match.range(at: 1), in: text) else { return 0 }
+        
+        guard let casted = Int(text[tokenRange]) else { return 0 }
+        
+        return casted
     }
 }
 

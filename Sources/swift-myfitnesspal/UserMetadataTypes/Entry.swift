@@ -8,11 +8,7 @@
 import Foundation
 
 public struct Entry {
+    
     let name: String
-    let calories: Int
-    let carbs: Int
-    let fat: Int
-    let protein: Int
-    let sodium: Int
-    let sugar: Int
+    let macros: Macros
 }
