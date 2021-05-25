@@ -74,7 +74,7 @@ extension MyFitnessPalClient {
                 do {
                     try self.parseMeals(page: dayPage, completion: completion)
                 } catch {
-                    completion(.failure(MyFitnessPalError.dayError))
+                    completion(.failure(MyFitnessPalError.dayParsingError))
                 }
             case .failure(_):
                 completion(.failure(MyFitnessPalError.dayError))
@@ -83,7 +83,7 @@ extension MyFitnessPalClient {
     }
     
     public func getDay(year: Int, month: Int, day: Int, completion: @escaping MyFitnessPalDayCompletion) {
-        let components = DateComponents(year: year, month: month, day: day)
+        let components = DateComponents(calendar: .current, year: year, month: month, day: day)
         guard let date = components.date else { completion(.failure(MyFitnessPalError.dayError)); return }
         self.getDay(date: date, completion: completion)
     }
@@ -207,12 +207,12 @@ extension MyFitnessPalClient {
             while try possibleEntry.children().array()[0].children().array()[0].className() == "js-show-edit-food" {
                 let children = possibleEntry.children().array()
                 let name = try children[0].text()
-                let calories = try children[1].text()
-                let carbs = try children[2].text().split(separator: " ")[0]
-                let fat = try children[3].text().split(separator: " ")[0]
-                let protein = try children[4].text().split(separator: " ")[0]
-                let sodium = try children[5].text().split(separator: " ")[0]
-                let sugar = try children[6].text().split(separator: " ")[0]
+                let calories = try children[1].text().replacingOccurrences(of: ",", with: "")
+                let carbs = try children[2].text().split(separator: " ")[0].replacingOccurrences(of: ",", with: "")
+                let fat = try children[3].text().split(separator: " ")[0].replacingOccurrences(of: ",", with: "")
+                let protein = try children[4].text().split(separator: " ")[0].replacingOccurrences(of: ",", with: "")
+                let sodium = try children[5].text().split(separator: " ")[0].replacingOccurrences(of: ",", with: "")
+                let sugar = try children[6].text().split(separator: " ")[0].replacingOccurrences(of: ",", with: "")
                 
                 let newEntry = Entry(name: name, calories: Int(calories)!, carbs: Int(carbs)!, fat: Int(fat)!, protein: Int(protein)!, sodium: Int(sodium)!, sugar: Int(sugar)!)
                 newMeal.addEntry(newEntry)
