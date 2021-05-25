@@ -11,4 +11,5 @@ public enum MyFitnessPalError: String, Error {
     case loginError
     case incorrectUsernamePassword
     case loginAuthError
+    case dayError
 }
