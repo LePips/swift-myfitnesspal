@@ -18,6 +18,8 @@ public class MyFitnessPalClient {
     
     // MARK: public variables
     
+    public static let testClient = MyFitnessPalTestClient(username: "Test", password: "")
+    
     public let username: String
     private(set) public var userID: String = ""
     
@@ -40,10 +42,9 @@ public class MyFitnessPalClient {
         // Individual sessions for each client
         self.session = URLSession(configuration: .default)
     }
-}
 
-// MARK: public functions
-extension MyFitnessPalClient {
+    
+    // MARK: public functions
     
     public func login(completion: @escaping MyFitnessPalCompletion) {
         
