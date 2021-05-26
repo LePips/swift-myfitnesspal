@@ -22,6 +22,7 @@ public class MyFitnessPalClient {
     
     public let username: String
     private(set) public var userID: String = ""
+    private(set) public var loggedIn = false
     
     // TODO: Don't store plainly
     private let password: String
@@ -63,6 +64,8 @@ public class MyFitnessPalClient {
     }
     
     public func getDay(date: Date, completion: @escaping MyFitnessPalDayCompletion) {
+        
+        guard self.loggedIn else { completion(.failure(.notLoggedIn)); return }
         
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
@@ -141,6 +144,8 @@ extension MyFitnessPalClient {
                 // The value recieved in the "user_id" field cannot be
                 // casted to NSNumber for some unknown reason
                 self.setUserID(json["user_id"] as! String)
+                
+                self.setLoggedIn()
                 
                 // TODO: Switch back to getting user metadata once it is complete
                 completion(nil)
@@ -293,5 +298,9 @@ extension MyFitnessPalClient {
     
     private func setAuthToken(_ authToken: AuthToken) {
         self.authToken = authToken
+    }
+    
+    private func setLoggedIn() {
+        self.loggedIn = true
     }
 }

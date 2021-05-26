@@ -8,6 +8,7 @@
 import Foundation
 
 public enum MyFitnessPalError: String, Error {
+    case notLoggedIn
     case loginError
     case incorrectUsernamePassword
     case loginAuthError
