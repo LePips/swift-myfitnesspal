@@ -7,13 +7,13 @@
 
 import Foundation
 
-struct AuthToken {
+public struct AuthToken {
     
     private let expireDate: Date
-    let accessToken: String
-    let refreshToken: String
+    public let accessToken: String
+    public let refreshToken: String
     
-    var hasExpired: Bool {
+    public var hasExpired: Bool {
         return Date() > expireDate
     }
     

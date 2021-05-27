@@ -9,8 +9,7 @@ import Foundation
 import SwiftSoup
 
 // TODO: Make better completion value
-public typealias MyFitnessPalCompletion = (MyFitnessPalError?) -> Void
-
+public typealias MyFitnessPalLoginCompletion = (Result<AuthToken, MyFitnessPalError>) -> Void
 public typealias MyFitnessPalDayCompletion = (Result<Day, MyFitnessPalError>) -> Void
 
 
@@ -23,6 +22,7 @@ public class MyFitnessPalClient {
     public let username: String
     private(set) public var userID: String = ""
     private(set) public var loggedIn = false
+    private(set) public var authToken: AuthToken? = nil
     
     // TODO: Don't store plainly
     private let password: String
@@ -30,7 +30,6 @@ public class MyFitnessPalClient {
     // MARK: private variables
     
     private let session: URLSession
-    private var authToken: AuthToken? = nil
     
     // MARK: init
     
@@ -47,18 +46,18 @@ public class MyFitnessPalClient {
     
     // MARK: public functions
     
-    public func login(completion: @escaping MyFitnessPalCompletion) {
+    public func login(completion: @escaping MyFitnessPalLoginCompletion) {
         
         let loginRequest = SiteRequest(path: ["account", "login"])
         session.load(request: loginRequest) { result in
             switch result {
             case .success(let response):
-                guard let loginPage = String.decodeUTF8(data: response.body) else { completion(MyFitnessPalError.loginError); return }
+                guard let loginPage = String.decodeUTF8(data: response.body) else { completion(.failure(MyFitnessPalError.loginError)); return }
                 let authToken = self.parseLoginPageForToken(loginPage)
                 self.postLogin(token: authToken, completion: completion)
             case .failure(_):
                 // TODO: Handle error from request properly instead of throwing login error
-                completion(MyFitnessPalError.loginError)
+                completion(.failure(MyFitnessPalError.loginError))
             }
         }
     }
@@ -109,7 +108,7 @@ extension MyFitnessPalClient {
         return String(page[tokenRange])
     }
     
-    private func postLogin(token: String, completion: @escaping MyFitnessPalCompletion) {
+    private func postLogin(token: String, completion: @escaping MyFitnessPalLoginCompletion) {
         
         let parameters = ["authenticity_token": token, "username": self.username, "password": self.password]
         
@@ -117,25 +116,25 @@ extension MyFitnessPalClient {
         session.load(request: loginRequest) { result in
             switch result {
             case .success(let response):
-                guard let page = String.decodeUTF8(data: response.body) else { completion(MyFitnessPalError.loginError); return }
-                guard !page.contains("Incorrect") else { completion(MyFitnessPalError.incorrectUsernamePassword); return }
+                guard let page = String.decodeUTF8(data: response.body) else { completion(.failure(MyFitnessPalError.loginError)); return }
+                guard !page.contains("Incorrect") else { completion(.failure(MyFitnessPalError.incorrectUsernamePassword)); return }
                 
                 self.getAuthToken(completion: completion)
             case .failure(_):
                 // TODO: Handle error from request properly instead of throwing login error
-                completion(MyFitnessPalError.loginError)
+                completion(.failure(MyFitnessPalError.loginError))
             }
         }
     }
     
-    private func getAuthToken(completion: @escaping MyFitnessPalCompletion) {
+    private func getAuthToken(completion: @escaping MyFitnessPalLoginCompletion) {
         
         let authRequest = SiteRequest(path: ["user", "auth_token"], parameters: ["refresh": "true"])
         session.load(request: authRequest) { result in
             switch result {
             case .success(let response):
                 // TODO: Handle error from auth response with better information
-                guard let json = JSON.decode(data: response.body) else { completion(MyFitnessPalError.loginAuthError); return }
+                guard let json = JSON.decode(data: response.body) else { completion(.failure(MyFitnessPalError.loginError)); return }
                 
                 // TODO: Implement proper json value decoding instead of casting
                 let authToken = AuthToken(expiresIn: json["expires_in"] as! Double, accessToken: json["access_token"] as! String, refreshToken: json["refresh_token"] as! String)
@@ -148,53 +147,53 @@ extension MyFitnessPalClient {
                 self.setLoggedIn()
                 
                 // TODO: Switch back to getting user metadata once it is complete
-                completion(nil)
+                completion(.success(authToken))
 //                self.getUserMetaData(completion: completion)
             case .failure(_):
                 // TODO: Handle error from request properly instead of throwing login error
-                completion(MyFitnessPalError.loginError)
+                completion(.failure(MyFitnessPalError.loginError))
             }
         }
     }
     
-    private func getUserMetaData(completion: @escaping MyFitnessPalCompletion) {
-        
-        let requestedFields = [
-            "diary_preferences",
-            "goal_preferences",
-            "unit_preferences",
-            "paid_subscriptions",
-            "account",
-            "goal_displays",
-            "location_preferences",
-            "system_data",
-            "profiles",
-            "step_sources",
-        ]
-        
-        var parameterFields = requestedFields.reduce("") { result, current in
-            result + "fields[]=\(current)&"
-        }
-        parameterFields.removeLast()
-        
-        // TODO: Replace with better error
-        guard let authToken = authToken else { completion(MyFitnessPalError.loginError); return }
-        
-        var headers = authToken.headers
-        headers["mfp-user-id"] = userID
-        
-        let userRequest = APIRequest(path: ["v2", "users", userID], headers: headers, parameters: [:], explicitParameters: parameterFields)
-        
-        session.load(request: userRequest) { result in
-            switch result {
-            case .success(_):
-                // TODO: Parse json response and create corresponding structures
-                completion(nil)
-            case .failure(_):
-                // TODO: Handle error from request properly instead of throwing login error
-                completion(MyFitnessPalError.loginError)
-            }
-        }
+    private func getUserMetaData(completion: @escaping MyFitnessPalLoginCompletion) {
+//
+//        let requestedFields = [
+//            "diary_preferences",
+//            "goal_preferences",
+//            "unit_preferences",
+//            "paid_subscriptions",
+//            "account",
+//            "goal_displays",
+//            "location_preferences",
+//            "system_data",
+//            "profiles",
+//            "step_sources",
+//        ]
+//
+//        var parameterFields = requestedFields.reduce("") { result, current in
+//            result + "fields[]=\(current)&"
+//        }
+//        parameterFields.removeLast()
+//
+//        // TODO: Replace with better error
+//        guard let authToken = authToken else { completion(MyFitnessPalError.loginError); return }
+//
+//        var headers = authToken.headers
+//        headers["mfp-user-id"] = userID
+//
+//        let userRequest = APIRequest(path: ["v2", "users", userID], headers: headers, parameters: [:], explicitParameters: parameterFields)
+//
+//        session.load(request: userRequest) { result in
+//            switch result {
+//            case .success(_):
+//                // TODO: Parse json response and create corresponding structures
+//                completion(nil)
+//            case .failure(_):
+//                // TODO: Handle error from request properly instead of throwing login error
+//                completion(MyFitnessPalError.loginError)
+//            }
+//        }
     }
     
     private func parseDay(page: String, completion: @escaping MyFitnessPalDayCompletion) throws {
