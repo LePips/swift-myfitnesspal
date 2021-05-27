@@ -44,6 +44,6 @@ client.getDay(Date()) { result in
 The project is marked with a lot of `TODO` comments where speed of development was prioritized over "correct" development (mainly error checking)
 
 Some TODOs include:
-[ ] - Allow password gathering from Keychain
-[ ] - Complete user MetaData call
-[ ] - Create list of functions to gather
+- [ ] Allow password gathering from Keychain
+- [ ] Complete user MetaData call
+- [ ] Create list of functions to gather
