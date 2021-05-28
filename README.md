@@ -14,11 +14,18 @@ let client = MyFitnessPalClient(username: "JohnnyAppleseed", password: "iLikeApp
 
 ### Login
 
-Before any calls can be completed, the user must first login. A successful login is determined by a `nil` error in the completion closure.
+Before any calls can be completed, the user must first login.
+
+The completion closure returns a `Result<AuthToken, MyFitnessPalError`. The auth token is provided so the client can store it themselves.
 
 ```swift
-client.login { error in
-  self.loggedIn = error == nil
+client.login { result in
+  switch result {
+    case .success(let authToken):
+      self.Store(authToken)
+    case .failure(let error):
+      print(error)
+  }
 }
 ```
 
