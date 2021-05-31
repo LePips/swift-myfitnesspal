@@ -20,8 +20,8 @@ public class MyFitnessPalTestClient: MyFitnessPalClient {
         super.init(username: "", password: "")
     }
     
-    override public func login(completion: @escaping MyFitnessPalCompletion) {
-        completion(nil)
+    override public func login(completion: @escaping MyFitnessPalLoginCompletion) {
+        completion(.success(()))
     }
     
     override public func getDay(date: Date, completion: @escaping MyFitnessPalDayCompletion) {

@@ -14,4 +14,13 @@ public enum MyFitnessPalError: String, Error {
     case loginAuthError
     case dayError
     case dayParsingError
+    
+    public var localizedDescription: String {
+        switch self {
+        case .notLoggedIn:
+            return "Client has not been logged in"
+        default:
+            return self.rawValue
+        }
+    }
 }

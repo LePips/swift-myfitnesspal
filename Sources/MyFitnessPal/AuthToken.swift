@@ -7,11 +7,14 @@
 
 import Foundation
 
-public struct AuthToken {
+/*
+ An auth token used for some MyFitnessPal API calls
+ */
+struct AuthToken {
     
     private let expireDate: Date
-    public let accessToken: String
-    public let refreshToken: String
+    let accessToken: String
+    let refreshToken: String
     
     public var hasExpired: Bool {
         return Date() > expireDate

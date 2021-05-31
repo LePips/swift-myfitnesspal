@@ -8,10 +8,6 @@
 import Foundation
 import SwiftSoup
 
-// TODO: Make better completion value
-public typealias MyFitnessPalLoginCompletion = (Result<AuthToken, MyFitnessPalError>) -> Void
-public typealias MyFitnessPalDayCompletion = (Result<Day, MyFitnessPalError>) -> Void
-
 
 public class MyFitnessPalClient {
     
@@ -22,14 +18,18 @@ public class MyFitnessPalClient {
     public let username: String
     private(set) public var userID: String = ""
     private(set) public var loggedIn = false
-    private(set) public var authToken: AuthToken? = nil
     
     // TODO: Don't store plainly
     private let password: String
     
+    
     // MARK: private variables
     
     private let session: URLSession
+    
+    /// Auth token used for some api calls
+    private var authToken: AuthToken? = nil
+    
     
     // MARK: init
     
@@ -119,7 +119,10 @@ extension MyFitnessPalClient {
                 guard let page = String.decodeUTF8(data: response.body) else { completion(.failure(MyFitnessPalError.loginError)); return }
                 guard !page.contains("Incorrect") else { completion(.failure(MyFitnessPalError.incorrectUsernamePassword)); return }
                 
-                self.getAuthToken(completion: completion)
+                
+                // TODO: Switch back to getting auth token and getting user metadata after metadata call completed
+//                self.getAuthToken(completion: completion)
+                completion(.success(()))
             case .failure(_):
                 // TODO: Handle error from request properly instead of throwing login error
                 completion(.failure(MyFitnessPalError.loginError))
@@ -147,7 +150,7 @@ extension MyFitnessPalClient {
                 self.setLoggedIn()
                 
                 // TODO: Switch back to getting user metadata once it is complete
-                completion(.success(authToken))
+                completion(.success(()))
 //                self.getUserMetaData(completion: completion)
             case .failure(_):
                 // TODO: Handle error from request properly instead of throwing login error
