@@ -62,6 +62,10 @@ public class MyFitnessPalClient {
         }
     }
     
+    public func logout() {
+        print(HTTPCookieStorage.shared.cookies?.compactMap({ $0.name }))
+    }
+    
     public func getDay(date: Date, completion: @escaping MyFitnessPalDayCompletion) {
         
         guard self.loggedIn else { completion(.failure(.notLoggedIn)); return }
