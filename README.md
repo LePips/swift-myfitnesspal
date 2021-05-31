@@ -16,13 +16,13 @@ let client = MyFitnessPalClient(username: "JohnnyAppleseed", password: "iLikeApp
 
 Before any calls can be completed, the user must first login.
 
-The completion closure returns a `Result<AuthToken, MyFitnessPalError`. The auth token is provided so the client can store it themselves.
+The completion closure returns a `Result<Void, MyFitnessPalError`
 
 ```swift
 client.login { result in
   switch result {
-    case .success(let authToken):
-      self.Store(authToken)
+    case .success(_):
+      print("Logged in")
     case .failure(let error):
       print(error)
   }
@@ -33,7 +33,7 @@ client.login { result in
 
 Retrieves meal and calorie information for a given day. Two calls are available, one that takes in a `Date` object and another that specifies the year, month, and day.
 
-The completion closure returns a `Result<Day, MyFitnessPalError>`.
+The completion closure returns a `Result<Day, MyFitnessPalError>`
 
 ```swift
 client.getDay(Date()) { result in
