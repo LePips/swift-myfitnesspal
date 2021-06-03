@@ -51,7 +51,10 @@ client.getDay(Date()) { result in
 The project is marked with a lot of `TODO` comments where speed of development was prioritized over "correct" development (mainly error checking)
 
 Some TODOs include:
+- [ ] Get water usage
+- [ ] Get measurements
+- [ ] Food logging via hidden /v2/food api from the site
+- [ ] Food searching
 - [ ] Allow 'Remember me' via storing cookies and logout
 - [ ] Allow password gathering from Keychain
 - [ ] Complete user MetaData call
-- [ ] Create list of functions to gather
