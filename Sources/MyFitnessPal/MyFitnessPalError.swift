@@ -14,6 +14,7 @@ public enum MyFitnessPalError: String, Error {
     case loginAuthError
     case dayError
     case dayParsingError
+    case foodSearchError
     
     public var localizedDescription: String {
         switch self {

@@ -10,10 +10,10 @@ import Foundation
 /*
  An auth token used for some MyFitnessPal API calls
  */
-struct AuthToken {
+public struct AuthToken {
     
     private let expireDate: Date
-    let accessToken: String
+    public let accessToken: String
     let refreshToken: String
     
     public var hasExpired: Bool {

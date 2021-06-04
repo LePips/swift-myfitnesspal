@@ -46,6 +46,9 @@ public class MyFitnessPalClient {
     
     // MARK: public functions
     
+    /// Logs in the user associated with the client
+    ///
+    /// - parameter completion: The MyFitnessPalLoginCompletion that will execute upon a successful login or if an error occurs
     public func login(completion: @escaping MyFitnessPalLoginCompletion) {
         
         let loginRequest = SiteRequest(path: ["account", "login"])
@@ -62,6 +65,10 @@ public class MyFitnessPalClient {
         }
     }
     
+    /// Gets the meals and corresponding entries for the given date
+    ///
+    /// - parameter date: The date value to get meals from
+    /// - parameter completion: The MyFitnessPalDayCompletion that will execute upon successfully retrieving the meals for a day or if an error occurs
     public func getDay(date: Date, completion: @escaping MyFitnessPalDayCompletion) {
         
         guard self.loggedIn else { completion(.failure(.notLoggedIn)); return }
@@ -85,10 +92,43 @@ public class MyFitnessPalClient {
         }
     }
     
+    /// Gets the meals and corresponding entries for the given date
+    ///
+    /// - parameter year
+    /// - parameter month
+    /// - parameter day
+    /// - parameter completion: The MyFitnessPalDayCompletion that will execute upon successfully retrieving the meals for a day or if an error occurs
     public func getDay(year: Int, month: Int, day: Int, completion: @escaping MyFitnessPalDayCompletion) {
         let components = DateComponents(calendar: .current, year: year, month: month, day: day)
         guard let date = components.date else { completion(.failure(MyFitnessPalError.dayError)); return }
         self.getDay(date: date, completion: completion)
+    }
+    
+    /// Searches MyFitnessPal for a food
+    ///
+    /// - parameter query: food query to search
+    /// - parameter amount: number of food results to return, default is 10
+    /// - parameter completion: The MyFitnessPalFoodSearchCompletion that will execute upon successfully retrieving foods from a query or if an error occurs
+    public func searchFood(query: String, amount: Int = 10, completion: @escaping MyFitnessPalFoodSearchCompletion) {
+        // TODO: Implement paging?
+        let foodRequest = APIRequest(path: ["public", "nutrition"], parameters: ["q": query, "page": "1", "per_page": "\(amount)"])
+        
+        session.load(request: foodRequest) { result in
+            switch result {
+            case .success(let response):
+                guard let data = response.body else { completion(.failure(.foodSearchError)); return }
+                let decoder = JSONDecoder()
+                do {
+                    let wrapped = try decoder.decode(ResponseWrapper.self, from: data)
+                    completion(.success(wrapped.items.food))
+                } catch {
+                    print(error)
+                    completion(.failure(.foodSearchError))
+                }
+            case .failure(_):
+                completion(.failure(.foodSearchError))
+            }
+        }
     }
 }
 

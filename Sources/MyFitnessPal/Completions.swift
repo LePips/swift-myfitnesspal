@@ -12,3 +12,6 @@ public typealias MyFitnessPalLoginCompletion = (Result<Void, MyFitnessPalError>)
 
 /// Completion for retrieving a day
 public typealias MyFitnessPalDayCompletion = (Result<Day, MyFitnessPalError>) -> Void
+
+/// Completion for searching food
+public typealias MyFitnessPalFoodSearchCompletion = (Result<[Food], MyFitnessPalError>) -> Void
