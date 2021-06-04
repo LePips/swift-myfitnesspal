@@ -16,10 +16,6 @@ public class MyFitnessPalTestClient: MyFitnessPalClient {
     private let dinnerEntries: [Entry] = [Entry(name: "Steak", macros: Macros(calories: 500, carbs: 1, fat: 3, protein: 4, sodium: 5, sugar: 2)),
                                         Entry(name: "Potatoes", macros: Macros(calories: 400, carbs: 1, fat: 2, protein: 3, sodium: 4, sugar: 5))]
     
-    internal override init(username: String, password: String) {
-        super.init(username: "", password: "")
-    }
-    
     override public func login(completion: @escaping MyFitnessPalLoginCompletion) {
         completion(.success(()))
     }
