@@ -1,0 +1,425 @@
+{
+  "warnings": [
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/AuthToken.swift",
+      "line": 13,
+      "symbol": "AuthToken",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/AuthToken.swift",
+      "line": 16,
+      "symbol": "AuthToken.accessToken",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/AuthToken.swift",
+      "line": 19,
+      "symbol": "AuthToken.hasExpired",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/HTTP/URLSession+REST.swift",
+      "line": 10,
+      "symbol": "SimpleError",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/HTTP/URLSession+REST.swift",
+      "line": 14,
+      "symbol": "SimpleError.init(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/MyFitnessPalClient.swift",
+      "line": 12,
+      "symbol": "MyFitnessPalClient",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/MyFitnessPalClient.swift",
+      "line": 16,
+      "symbol": "MyFitnessPalClient.testClient",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/MyFitnessPalClient.swift",
+      "line": 18,
+      "symbol": "MyFitnessPalClient.username",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/MyFitnessPalClient.swift",
+      "line": 19,
+      "symbol": "MyFitnessPalClient.userID",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/MyFitnessPalClient.swift",
+      "line": 20,
+      "symbol": "MyFitnessPalClient.loggedIn",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/MyFitnessPalError.swift",
+      "line": 10,
+      "symbol": "MyFitnessPalError",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/MyFitnessPalError.swift",
+      "line": 11,
+      "symbol": "MyFitnessPalError.notLoggedIn",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/MyFitnessPalError.swift",
+      "line": 12,
+      "symbol": "MyFitnessPalError.loginError",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/MyFitnessPalError.swift",
+      "line": 13,
+      "symbol": "MyFitnessPalError.incorrectUsernamePassword",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/MyFitnessPalError.swift",
+      "line": 14,
+      "symbol": "MyFitnessPalError.loginAuthError",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/MyFitnessPalError.swift",
+      "line": 15,
+      "symbol": "MyFitnessPalError.dayError",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/MyFitnessPalError.swift",
+      "line": 16,
+      "symbol": "MyFitnessPalError.dayParsingError",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/MyFitnessPalError.swift",
+      "line": 17,
+      "symbol": "MyFitnessPalError.foodSearchError",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/MyFitnessPalError.swift",
+      "line": 19,
+      "symbol": "MyFitnessPalError.localizedDescription",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/TestClient.swift",
+      "line": 10,
+      "symbol": "MyFitnessPalTestClient",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/Types/Day.swift",
+      "line": 10,
+      "symbol": "Day",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/Types/Day.swift",
+      "line": 12,
+      "symbol": "Day.meals",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/Types/Day.swift",
+      "line": 13,
+      "symbol": "Day.totalMacros",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/Types/Day.swift",
+      "line": 14,
+      "symbol": "Day.goalMacros",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/Types/Day.swift",
+      "line": 15,
+      "symbol": "Day.remainingMacros",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/Types/Day.swift",
+      "line": 16,
+      "symbol": "Day.exerciseCalories",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/Types/Entry.swift",
+      "line": 10,
+      "symbol": "Entry",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/Types/Entry.swift",
+      "line": 12,
+      "symbol": "Entry.name",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/Types/Entry.swift",
+      "line": 13,
+      "symbol": "Entry.macros",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/Types/Food.swift",
+      "line": 12,
+      "symbol": "Food",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/Types/Food.swift",
+      "line": 16,
+      "symbol": "Food.name",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/Types/Food.swift",
+      "line": 17,
+      "symbol": "Food.nutritionalContents",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/Types/Macros.swift",
+      "line": 11,
+      "symbol": "Macros",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/Types/Macros.swift",
+      "line": 13,
+      "symbol": "Macros.calories",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/Types/Macros.swift",
+      "line": 14,
+      "symbol": "Macros.carbs",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/Types/Macros.swift",
+      "line": 15,
+      "symbol": "Macros.fat",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/Types/Macros.swift",
+      "line": 16,
+      "symbol": "Macros.protein",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/Types/Macros.swift",
+      "line": 17,
+      "symbol": "Macros.sodium",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/Types/Macros.swift",
+      "line": 18,
+      "symbol": "Macros.sugar",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/Types/Macros.swift",
+      "line": 21,
+      "symbol": "NutritionalContents",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/Types/Macros.swift",
+      "line": 28,
+      "symbol": "NutritionalContents.calcium",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/Types/Macros.swift",
+      "line": 29,
+      "symbol": "NutritionalContents.carbohydrates",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/Types/Macros.swift",
+      "line": 30,
+      "symbol": "NutritionalContents.cholesterol",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/Types/Macros.swift",
+      "line": 32,
+      "symbol": "NutritionalContents.fat",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/Types/Macros.swift",
+      "line": 33,
+      "symbol": "NutritionalContents.fiber",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/Types/Macros.swift",
+      "line": 34,
+      "symbol": "NutritionalContents.iron",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/Types/Macros.swift",
+      "line": 35,
+      "symbol": "NutritionalContents.monounsaturatedFat",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/Types/Macros.swift",
+      "line": 36,
+      "symbol": "NutritionalContents.polyunsaturatedFat",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/Types/Macros.swift",
+      "line": 37,
+      "symbol": "NutritionalContents.potassium",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/Types/Macros.swift",
+      "line": 38,
+      "symbol": "NutritionalContents.protein",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/Types/Macros.swift",
+      "line": 39,
+      "symbol": "NutritionalContents.saturatedFat",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/Types/Macros.swift",
+      "line": 40,
+      "symbol": "NutritionalContents.sodium",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/Types/Macros.swift",
+      "line": 41,
+      "symbol": "NutritionalContents.sugar",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/Types/Macros.swift",
+      "line": 42,
+      "symbol": "NutritionalContents.transFat",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/Types/Macros.swift",
+      "line": 43,
+      "symbol": "NutritionalContents.vitaminA",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/Types/Macros.swift",
+      "line": 44,
+      "symbol": "NutritionalContents.vitaminC",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/Types/Macros.swift",
+      "line": 46,
+      "symbol": "NutritionalContents.calories",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/Types/Meal.swift",
+      "line": 10,
+      "symbol": "Meal",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/Types/Meal.swift",
+      "line": 12,
+      "symbol": "Meal.name",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/Types/Meal.swift",
+      "line": 13,
+      "symbol": "Meal.entries",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    }
+  ],
+  "source_directory": "/Users/epippin/GitHub/MyFitnessPal"
+}
