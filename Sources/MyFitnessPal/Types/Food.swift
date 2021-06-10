@@ -32,7 +32,7 @@ public struct Food: Decodable {
 public struct FoodSearchResult {
     
     public let name: String
-    
-    
-    
+    public let searchNutritionalInfo: String
+    public let verified: Bool
+    let externalID: String
 }

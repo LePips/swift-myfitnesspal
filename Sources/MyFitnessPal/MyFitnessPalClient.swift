@@ -40,7 +40,11 @@ public class MyFitnessPalClient {
         self.password = password
         
         // Individual sessions for each client
-        self.session = URLSession(configuration: .default)
+        let config = URLSessionConfiguration.default
+        config.requestCachePolicy = .reloadIgnoringLocalCacheData
+        config.urlCache = nil
+        
+        self.session = URLSession(configuration: config)
     }
 
     
@@ -111,6 +115,8 @@ public class MyFitnessPalClient {
     /// - parameter completion: The MyFitnessPalFoodSearchCompletion that will execute upon successfully retrieving foods from a query or if an error occurs
     public func searchFood(query: String, completion: @escaping MyFitnessPalFoodSearchCompletion) {
         
+        guard self.loggedIn else { completion(.failure(.notLoggedIn)); return }
+        
         let searchRequest = SiteRequest(path: ["food", "search"])
         session.load(request: searchRequest) { result in
             switch result {
@@ -120,13 +126,42 @@ public class MyFitnessPalClient {
                 do {
                     let soup = try SwiftSoup.parseBodyFragment(page)
                     let tokens = try soup.select("input[name='authenticity_token']")
-                    let authToken = try tokens.first()!.attr("value")
+                    let authToken = try tokens.array()[0].attr("value")
                     self.postSearch(query: query, token: authToken, completion: completion)
                 } catch {
                     completion(.failure(.foodSearchError))
                 }
             case .failure(_):
                 completion(.failure(.foodSearchError))
+            }
+        }
+    }
+    
+    public func foodDetails(food: FoodSearchResult, completion: @escaping MyFitnessPalFoodDetailCompletion) {
+        
+        guard self.loggedIn else { completion(.failure(.notLoggedIn)); return }
+        
+        let requestedFields = ["nutritional_contents", "serving_sizes", "confirmations"]
+        
+        var parameterFields = requestedFields.reduce("") { result, current in
+            result + "fields[]=\(current)&"
+        }
+        parameterFields.removeLast()
+        
+        guard let authToken = authToken else { completion(.failure(.foodDetailError)); return }
+        
+        var headers = authToken.headers
+        headers["mfp-user-id"] = userID
+        headers["user-agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36"
+        
+        let detailRequest = APIRequest(path: ["v2", "foods", food.externalID], headers: headers, explicitParameters: parameterFields)
+        session.load(request: detailRequest) { result in
+            switch result {
+            case .success(let response):
+                let j = JSON.decode(data: response.body)
+                print(j)
+            case .failure(_):
+                completion(.failure(.foodDetailError))
             }
         }
     }
@@ -150,7 +185,7 @@ extension MyFitnessPalClient {
     
     private func postLogin(token: String, completion: @escaping MyFitnessPalLoginCompletion) {
         
-        let parameters = ["authenticity_token": token, "username": self.username, "password": self.password]
+        let parameters = ["authenticity_token": token, "username": self.username, "password": self.password, "remember_me": "1"]
         
         let loginRequest = SiteRequest(path: ["account", "login"], body: nil, headers: [:], parameters: parameters, method: .POST)
         session.load(request: loginRequest) { result in
@@ -159,10 +194,7 @@ extension MyFitnessPalClient {
                 guard let page = String.decodeUTF8(data: response.body) else { completion(.failure(MyFitnessPalError.loginError)); return }
                 guard !page.contains("Incorrect") else { completion(.failure(MyFitnessPalError.incorrectUsernamePassword)); return }
                 
-                
-                // TODO: Switch back to getting auth token and getting user metadata after metadata call completed
-//                self.getAuthToken(completion: completion)
-                completion(.success(()))
+                self.getAuthToken(completion: completion)
             case .failure(_):
                 // TODO: Handle error from request properly instead of throwing login error
                 completion(.failure(MyFitnessPalError.loginError))
@@ -327,33 +359,77 @@ extension MyFitnessPalClient {
     
     private func postSearch(query: String, token: String, completion: @escaping MyFitnessPalFoodSearchCompletion) {
         
-        let body = ["meal": "0", "search": query, "date": "2000-01-01", "authenticity_token": token]
-        let jsonString = body.reduce("") { "\($0)\($1.0)=\($1.1)&" }.dropLast()
-        let bodyData = jsonString.data(using: .utf8, allowLossyConversion: false)!
-        let searchRequest = SiteRequest(path: ["food", "search"], body: bodyData, headers: ["content-type": "application/x-www-form-urlencoded; charset=utf-8"], method: .POST)
+//        let c = cookies()
+//        print(cookies().map({ $0.name }))
+        
+        addCCPACookie()
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        
+        let body = ["authenticity_token": token, "meal": "0", "search": query, "date": formatter.string(from: Date())]
+        let bodyItems = body.compactMap({ URLQueryItem(name: $0, value: $1) })
+        
+        var components = URLComponents()
+        components.queryItems = bodyItems
+        let bodyData = components.query?.data(using: .utf8)
+        
+        var headers: [String: String] = [:]
+        headers["host"] = "www.myfitnesspal.com"
+        headers["content-type"] = "application/x-www-form-urlencoded"
+        headers["user-agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36"
+        
+        let searchRequest = SiteRequest(path: ["food", "search"], body: bodyData, headers: headers, method: .POST)
+        
         session.load(request: searchRequest) { result in
             switch result {
             case .success(let response):
                 guard let page = String.decodeUTF8(data: response.body) else { completion(.failure(.foodSearchError)); return }
-                
+//                print(page)
                 do {
                     let soup = try SwiftSoup.parseBodyFragment(page)
                     let tokens = try soup.select("li.matched-food")
-
-                    let first = tokens.array().first!
-
-                    let a = try! first.children().select("a")
-                    let externalID = try! a.attr("data-external-id")
-                    let id = try! a.text()
-                    let verified = try! a.attr("data-verified")
                     
+                    var searchResults: [FoodSearchResult] = []
+
+                    for matchedFood in tokens.array() {
+                        let a = try! matchedFood.children().select("a")
+                        let externalID = try! a.attr("data-external-id")
+                        let name = try! a.text()
+                        let verified = try! a.attr("data-verified") == "true" ? true : false
+                        
+                        let p = try! matchedFood.children().select("p")
+                        let searchNutritionalInfo = try! p.text()
+                        
+                        let result = FoodSearchResult(name: name, searchNutritionalInfo: searchNutritionalInfo, verified: verified, externalID: externalID)
+                        searchResults.append(result)
+                    }
                     
+                    completion(.success(searchResults))
                 } catch {
                     completion(.failure(.foodSearchError))
                 }
             case .failure(_):
                 completion(.failure(.foodSearchError))
             }
+        }
+    }
+    
+    func cookies() -> [HTTPCookie] {
+        let cookieStorage = HTTPCookieStorage.shared
+        return cookieStorage.cookies ?? []
+    }
+    
+    func addCCPACookie() {
+        if let cookie = HTTPCookie(properties: [
+            .domain: "www.myfitnesspal.com",
+            .path: "/",
+            .name: "CCPABannerShown",
+            .value: "true",
+            .secure: "FALSE",
+            .discard: "TRUE"
+        ]) {
+            HTTPCookieStorage.shared.setCookie(cookie)
         }
     }
 }
