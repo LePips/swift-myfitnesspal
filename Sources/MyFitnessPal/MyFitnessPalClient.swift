@@ -109,20 +109,20 @@ public class MyFitnessPalClient {
     /// - parameter query: food query to search
     /// - parameter amount: number of food results to return, default is 10
     /// - parameter completion: The MyFitnessPalFoodSearchCompletion that will execute upon successfully retrieving foods from a query or if an error occurs
-    public func searchFood(query: String, amount: Int = 10, completion: @escaping MyFitnessPalFoodSearchCompletion) {
-        // TODO: Implement paging?
-        let foodRequest = APIRequest(path: ["public", "nutrition"], parameters: ["q": query, "page": "1", "per_page": "\(amount)"])
+    public func searchFood(query: String, completion: @escaping MyFitnessPalFoodSearchCompletion) {
         
-        session.load(request: foodRequest) { result in
+        let searchRequest = SiteRequest(path: ["food", "search"])
+        session.load(request: searchRequest) { result in
             switch result {
             case .success(let response):
-                guard let data = response.body else { completion(.failure(.foodSearchError)); return }
-                let decoder = JSONDecoder()
+                guard let page = String.decodeUTF8(data: response.body) else { completion(.failure(MyFitnessPalError.loginError)); return }
+                
                 do {
-                    let wrapped = try decoder.decode(ResponseWrapper.self, from: data)
-                    completion(.success(wrapped.items.food))
+                    let soup = try SwiftSoup.parseBodyFragment(page)
+                    let tokens = try soup.select("input[name='authenticity_token']")
+                    let authToken = try tokens.first()!.attr("value")
+                    self.postSearch(query: query, token: authToken, completion: completion)
                 } catch {
-                    print(error)
                     completion(.failure(.foodSearchError))
                 }
             case .failure(_):
@@ -323,6 +323,38 @@ extension MyFitnessPalClient {
         guard let casted = Int(text[tokenRange]) else { return 0 }
         
         return casted
+    }
+    
+    private func postSearch(query: String, token: String, completion: @escaping MyFitnessPalFoodSearchCompletion) {
+        
+        let body = ["meal": "0", "search": query, "date": "2000-01-01", "authenticity_token": token]
+        let jsonString = body.reduce("") { "\($0)\($1.0)=\($1.1)&" }.dropLast()
+        let bodyData = jsonString.data(using: .utf8, allowLossyConversion: false)!
+        let searchRequest = SiteRequest(path: ["food", "search"], body: bodyData, headers: ["content-type": "application/x-www-form-urlencoded; charset=utf-8"], method: .POST)
+        session.load(request: searchRequest) { result in
+            switch result {
+            case .success(let response):
+                guard let page = String.decodeUTF8(data: response.body) else { completion(.failure(.foodSearchError)); return }
+                
+                do {
+                    let soup = try SwiftSoup.parseBodyFragment(page)
+                    let tokens = try soup.select("li.matched-food")
+
+                    let first = tokens.array().first!
+
+                    let a = try! first.children().select("a")
+                    let externalID = try! a.attr("data-external-id")
+                    let id = try! a.text()
+                    let verified = try! a.attr("data-verified")
+                    
+                    
+                } catch {
+                    completion(.failure(.foodSearchError))
+                }
+            case .failure(_):
+                completion(.failure(.foodSearchError))
+            }
+        }
     }
 }
 

@@ -29,23 +29,10 @@ public struct Food: Decodable {
     }
 }
 
-// MARK: Decoding wrappers
-
-struct ResponseWrapper: Decodable {
-    let items: FoodList
-}
-
-struct FoodList: Decodable {
+public struct FoodSearchResult {
     
-    struct ItemWrapper: Decodable {
-        let item: Food
-    }
+    public let name: String
     
-    let food: [Food]
     
-    init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        let wrapper = try container.decode([ItemWrapper].self)
-        self.food = wrapper.map({ $0.item })
-    }
+    
 }
