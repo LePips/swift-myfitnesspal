@@ -15,7 +15,7 @@ public struct Day {
     public let remainingMacros: Macros
     public let exerciseCalories: Int
     
-    public var sample: Day {
+    public static var sample: Day {
         
         let total = Macros(calories: 1234, carbs: 93, fat: 19, protein: 102, sodium: 1200, sugar: 33)
         let goal = Macros(calories: 2100, carbs: 200, fat: 40, protein: 180, sodium: 2300, sugar: 92)
