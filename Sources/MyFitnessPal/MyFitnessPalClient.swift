@@ -159,6 +159,7 @@ extension MyFitnessPalClient {
                 guard let page = String.decodeUTF8(data: response.body) else { completion(.failure(MyFitnessPalError.loginError)); return }
                 guard !page.contains("Incorrect") else { completion(.failure(MyFitnessPalError.incorrectUsernamePassword)); return }
                 
+                self.setLoggedIn()
                 
                 // TODO: Switch back to getting auth token and getting user metadata after metadata call completed
 //                self.getAuthToken(completion: completion)
@@ -186,8 +187,6 @@ extension MyFitnessPalClient {
                 // The value recieved in the "user_id" field cannot be
                 // casted to NSNumber for some unknown reason
                 self.setUserID(json["user_id"] as! String)
-                
-                self.setLoggedIn()
                 
                 // TODO: Switch back to getting user metadata once it is complete
                 completion(.success(()))
