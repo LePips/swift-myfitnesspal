@@ -8,12 +8,12 @@
 import Foundation
 
 /*
- An auth token used for some MyFitnessPal API calls
+ AuthToken used for MyFitnessPal API calls
  */
-public struct AuthToken {
+struct AuthToken {
     
     private let expireDate: Date
-    public let accessToken: String
+    let accessToken: String
     let refreshToken: String
     
     public var hasExpired: Bool {
