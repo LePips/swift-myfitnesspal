@@ -183,13 +183,6 @@
       "warning": "undocumented"
     },
     {
-      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/Types/Day.swift",
-      "line": 18,
-      "symbol": "Day.sample",
-      "symbol_kind": "source.lang.swift.decl.var.static",
-      "warning": "undocumented"
-    },
-    {
       "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/Types/Entry.swift",
       "line": 10,
       "symbol": "Entry",
