@@ -1,27 +1,6 @@
 {
   "warnings": [
     {
-      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/AuthToken.swift",
-      "line": 13,
-      "symbol": "AuthToken",
-      "symbol_kind": "source.lang.swift.decl.struct",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/AuthToken.swift",
-      "line": 16,
-      "symbol": "AuthToken.accessToken",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/AuthToken.swift",
-      "line": 19,
-      "symbol": "AuthToken.hasExpired",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
       "file": "/Users/epippin/GitHub/MyFitnessPal/Sources/MyFitnessPal/HTTP/URLSession+REST.swift",
       "line": 10,
       "symbol": "SimpleError",
